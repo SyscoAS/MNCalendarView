@@ -15,6 +15,7 @@
 #define MN_YEAR   MN_DAY * 365.f
 
 @protocol MNCalendarViewDelegate;
+@class MNCalendarViewDayCell;
 
 @interface MNCalendarView : UIView <UICollectionViewDataSource, UICollectionViewDelegate>
 
@@ -46,5 +47,6 @@
 
 - (BOOL)calendarView:(MNCalendarView *)calendarView shouldSelectDate:(NSDate *)date;
 - (void)calendarView:(MNCalendarView *)calendarView didSelectDate:(NSDate *)date;
+- (void)configureDayCell:(MNCalendarViewDayCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 @end

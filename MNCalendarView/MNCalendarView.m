@@ -241,58 +241,62 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-
-  if (indexPath.item < self.daysInWeek) {
-    MNCalendarViewWeekdayCell *cell =
-      [collectionView dequeueReusableCellWithReuseIdentifier:MNCalendarViewWeekdayCellIdentifier
-                                                forIndexPath:indexPath];
-  
-    NSInteger adjustedIndexOfDayInWeek = (indexPath.item + self.calendar.firstWeekday - 1) % self.daysInWeek;
-      
-    cell.backgroundColor = self.collectionView.backgroundColor;
-    cell.titleLabel.text = self.weekdaySymbols[adjustedIndexOfDayInWeek];
-    cell.separatorColor = self.separatorColor;
-    return cell;
-  }
-  MNCalendarViewDayCell *cell =
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.item < self.daysInWeek) {
+        MNCalendarViewWeekdayCell *cell =
+        [collectionView dequeueReusableCellWithReuseIdentifier:MNCalendarViewWeekdayCellIdentifier
+                                                  forIndexPath:indexPath];
+        
+        NSInteger adjustedIndexOfDayInWeek = (indexPath.item + self.calendar.firstWeekday - 1) % self.daysInWeek;
+        
+        cell.backgroundColor = self.collectionView.backgroundColor;
+        cell.titleLabel.text = self.weekdaySymbols[adjustedIndexOfDayInWeek];
+        cell.separatorColor = self.separatorColor;
+        return cell;
+    }
+    
+    MNCalendarViewDayCell *cell =
     [collectionView dequeueReusableCellWithReuseIdentifier:MNCalendarViewDayCellIdentifier
                                               forIndexPath:indexPath];
-  cell.separatorColor = self.separatorColor;
-  
-  NSDate *monthDate = self.monthDates[indexPath.section];
-  NSDate *firstDateInMonth = [self firstVisibleDateOfMonth:monthDate];
-
-  NSUInteger day = indexPath.item - self.daysInWeek;
-  
-  if (self.inversed) {
-      
-      NSInteger numberOfDaysInMonth = ([self.collectionView numberOfItemsInSection:indexPath.section] - self.daysInWeek) - 1;
-      NSInteger r = day / self.daysInWeek;
-      NSInteger c = day % self.daysInWeek;
-      day = numberOfDaysInMonth - (r * self.daysInWeek + (self.daysInWeek - c)) + 1;
-      
-  }
+    cell.separatorColor = self.separatorColor;
     
-  NSDateComponents *components =
+    NSDate *monthDate = self.monthDates[indexPath.section];
+    NSDate *firstDateInMonth = [self firstVisibleDateOfMonth:monthDate];
+    
+    NSUInteger day = indexPath.item - self.daysInWeek;
+    
+    if (self.inversed) {
+        
+        NSInteger numberOfDaysInMonth = ([self.collectionView numberOfItemsInSection:indexPath.section] - self.daysInWeek) - 1;
+        NSInteger r = day / self.daysInWeek;
+        NSInteger c = day % self.daysInWeek;
+        day = numberOfDaysInMonth - (r * self.daysInWeek + (self.daysInWeek - c)) + 1;
+        
+    }
+    
+    NSDateComponents *components =
     [self.calendar components:NSDayCalendarUnit|NSMonthCalendarUnit|NSYearCalendarUnit
                      fromDate:firstDateInMonth];
-  components.day += day;
-  
-  NSDate *date = [self.calendar dateFromComponents:components];
-  [cell setDate:date
-          month:monthDate
-       calendar:self.calendar];
-  
-  if (cell.enabled) {
-    [cell setEnabled:[self dateEnabled:date]];
-  }
-
-  if (self.selectedDate && cell.enabled) {
-    [cell setSelected:[date isEqualToDate:self.selectedDate]];
-  }
-  
-  return cell;
+    components.day += day;
+    
+    NSDate *date = [self.calendar dateFromComponents:components];
+    [cell setDate:date
+            month:monthDate
+         calendar:self.calendar];
+    
+    if (cell.enabled) {
+        [cell setEnabled:[self dateEnabled:date]];
+    }
+    
+    if (self.selectedDate && cell.enabled) {
+        [cell setSelected:[date isEqualToDate:self.selectedDate]];
+    }
+    
+    // extra cell configuration
+    [self.delegate configureDayCell:cell atIndexPath:indexPath];
+    
+    return cell;
 }
 
 #pragma mark - UICollectionViewDelegate
