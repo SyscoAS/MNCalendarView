@@ -14,7 +14,7 @@
 #define MN_WEEK   MN_DAY * 7.f
 #define MN_YEAR   MN_DAY * 365.f
 
-@protocol MNCalendarViewDelegate;
+@protocol MNCalendarViewDelegate, MNCalendarViewDataSource;
 @class MNCalendarViewDayCell;
 
 @interface MNCalendarView : UIView <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -22,6 +22,7 @@
 @property(nonatomic,strong,readonly) UICollectionView *collectionView;
 
 @property(nonatomic,assign) id<MNCalendarViewDelegate> delegate;
+@property(nonatomic,assign) id<MNCalendarViewDataSource> dataSource;
 
 @property(nonatomic,strong) NSCalendar *calendar;
 @property(nonatomic,copy)   NSDate     *fromDate;
@@ -47,6 +48,11 @@
 
 - (BOOL)calendarView:(MNCalendarView *)calendarView shouldSelectDate:(NSDate *)date;
 - (void)calendarView:(MNCalendarView *)calendarView didSelectDate:(NSDate *)date;
+
+@end
+
+@protocol MNCalendarViewDataSource <NSObject>
+
 - (void)calendarView:(MNCalendarView *)calendarView configureDayCell:(MNCalendarViewDayCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 @end
