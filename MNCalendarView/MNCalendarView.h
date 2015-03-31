@@ -47,6 +47,6 @@
 
 - (BOOL)calendarView:(MNCalendarView *)calendarView shouldSelectDate:(NSDate *)date;
 - (void)calendarView:(MNCalendarView *)calendarView didSelectDate:(NSDate *)date;
-- (void)configureDayCell:(MNCalendarViewDayCell *)cell atIndexPath:(NSIndexPath *)indexPath;
+- (void)calendarView:(MNCalendarView *)calendarView configureDayCell:(MNCalendarViewDayCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 
 @end

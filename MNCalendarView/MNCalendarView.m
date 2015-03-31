@@ -294,7 +294,7 @@
     }
     
     // extra cell configuration
-    [self.delegate configureDayCell:cell atIndexPath:indexPath];
+    [self.delegate calendarView:self configureDayCell:cell atIndexPath:indexPath];
     
     return cell;
 }
