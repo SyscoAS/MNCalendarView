@@ -48,10 +48,14 @@
 
 - (BOOL)calendarView:(MNCalendarView *)calendarView shouldSelectDate:(NSDate *)date;
 - (void)calendarView:(MNCalendarView *)calendarView didSelectDate:(NSDate *)date;
+- (void)calendarView:(MNCalendarView *)calendarView willLoadMonth:(NSDate *)month;
+
 
 @end
 
 @protocol MNCalendarViewDataSource <NSObject>
+
+@optional
 
 - (void)calendarView:(MNCalendarView *)calendarView configureDayCell:(MNCalendarViewDayCell *)cell atIndexPath:(NSIndexPath *)indexPath;
 

@@ -217,15 +217,24 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
            viewForSupplementaryElementOfKind:(NSString *)kind
                                  atIndexPath:(NSIndexPath *)indexPath {
-  MNCalendarHeaderView *headerView =
+    
+    MNCalendarHeaderView *headerView =
     [collectionView dequeueReusableSupplementaryViewOfKind:kind
                                        withReuseIdentifier:MNCalendarHeaderViewIdentifier
                                               forIndexPath:indexPath];
-
-  headerView.backgroundColor = self.collectionView.backgroundColor;
-  headerView.titleLabel.text = [self.monthFormatter stringFromDate:self.monthDates[indexPath.section]];
-
-  return headerView;
+    
+    // load model
+    NSDate *monthDate = self.monthDates[indexPath.section];
+    
+    headerView.backgroundColor = self.collectionView.backgroundColor;
+    headerView.titleLabel.text = [self.monthFormatter stringFromDate:self.monthDates[indexPath.section]];
+    
+    // inform delegate
+    if ([self.delegate respondsToSelector:@selector(calendarView:willLoadMonth:)]) {
+        [self.delegate calendarView:self willLoadMonth:monthDate];
+    }
+    
+    return headerView;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -294,7 +303,10 @@
     }
     
     // extra cell configuration
-    [self.dataSource calendarView:self configureDayCell:cell atIndexPath:indexPath];
+    if ([self.dataSource respondsToSelector:@selector(calendarView:configureDayCell:atIndexPath:)]) {
+        
+        [self.dataSource calendarView:self configureDayCell:cell atIndexPath:indexPath];
+    }
     
     return cell;
 }
